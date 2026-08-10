@@ -4,7 +4,7 @@
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
 [![Cases](https://img.shields.io/badge/Cases-2%2C000-blue.svg)](#-dataset)
-[![Diseases](https://img.shields.io/badge/Diseases-442-teal.svg)](#-dataset)
+[![Diseases](https://img.shields.io/badge/Diseases-443-teal.svg)](#-dataset)
 [![Tasks](https://img.shields.io/badge/Tasks-7%20blocks%20%2B%203%20relations-orange.svg)](#-benchmark-design)
 
 </div>
@@ -83,7 +83,7 @@ The released test set comes in two aligned subsets. Both contain the same 2,000 
 | Statistic | Value |
 |---|---|
 | Cases | 2,000 |
-| Distinct Western-medicine diseases | 442 |
+| Distinct Western-medicine diseases | 443 |
 | Distinct ICD-11 codes | 288 |
 | ICD-11 chapters covered | 19 |
 | Difficulty tiers (easy / medium / hard) | 666 / 667 / 667 |
