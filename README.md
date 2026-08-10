@@ -228,4 +228,4 @@ Coming soon.
 
 This dataset is released under the [CC BY-NC 4.0](LICENSE) license for non-commercial research use. Model outputs on this benchmark must not be used as a direct basis for clinical diagnosis or treatment.
 
-For questions and evaluation requests: **zhiliu@njucm.edu.cn**
+For questions and evaluation requests: **zhiliu@njucm.edu.cn** or **jdai27@jh.edu**
