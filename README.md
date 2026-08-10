@@ -21,9 +21,8 @@
 - [Introduction](#-introduction)
 - [Benchmark Design](#-benchmark-design)
 - [Dataset](#-dataset)
-- [Leaderboard](#-leaderboard)
-- [Key Findings](#-key-findings)
-- [Evaluation](#%EF%B8%8F-evaluation)
+- [Preliminary Study](#-preliminary-study)
+- [Evaluation and Leaderboard](#-evaluation-and-leaderboard)
 - [Data Access](#-data-access)
 - [Repository Structure](#-repository-structure)
 - [Citation](#-citation)
@@ -93,37 +92,43 @@ The released test set comes in two aligned subsets. Both contain the same 2,000 
 
 The gold labels (reference chain of thought, reference answer, and the seven-block decomposed reference labels) are not included in this repository and are available through gated access; see [Data Access](#-data-access).
 
-## 🏆 Leaderboard
+## 🔬 Preliminary Study
 
-Seven models were evaluated: five general-purpose models and two TCM-specialized models. Scores are normalized judge ratings over all 2,000 cases; content covers the seven blocks (0 to 35 points) and logic consistency covers the three cross-block relations (0 to 15 points).
+Before the formal run, two candidate judges were compared head to head on the outputs of three models over all 2,000 cases: a general-purpose judge (Qwen3.7-Plus) and a TCM-specialized judge (HuatuoGPT-3-32B). The general-purpose judge followed the score-cap rules of the rubric far more reliably (99.9 versus 67.6 percent compliance on content scoring), covered every case with stable structured output, separated responses within the same case more sharply, and showed no sign of same-family preference. The TCM-specialized judge interpreted tongue, pulse, formula, and materia medica findings more specifically, but violated the rubric more often and rated answers from its own model family noticeably higher. **Qwen3.7-Plus augmented with TCM-specific retrieval (TCM-RAG)** was therefore selected as the primary judge, with the specialized model retained for qualitative error review.
 
-**Table 2: Overall results on TCMCR-Reasoning**
+The selected judge was then stress-tested with controlled logical perturbations: single targeted errors were injected into model responses for 100 stratified cases, yielding 900 matched original-perturbed pairs across the three logic relations. The judge reliably penalized explicit contradictions such as cold-heat reversal and treatment-direction reversal (detection rates of 57 and 56 percent on the first two relations), and was less sensitive to omission-type errors in prescription analysis (31 percent on the third relation), which bounds the kinds of reasoning errors the reported scores can be trusted to reflect.
 
-| Model | Content | Logic Consistency | Structural Completeness |
-|---|---:|---:|---:|
-| GPT-5.5 | **54.1%** | **66.8%** | 100.0% |
-| Claude-Opus-4.8 | 54.0% | 66.0% | 100.0% |
-| DeepSeek-V4-Pro | 48.5% | 65.4% | 100.0% |
-| Gemini-3.1-Pro | 47.7% | 64.5% | 100.0% |
-| Qwen3.7-Max | 45.8% | 64.7% | 100.0% |
-| ShizhenGPT-7B | 41.8% | 62.4% | 99.3% |
-| HuatuoGPT-3-8B | 40.7% | 60.8% | 100.0% |
+<p align="center">
+  <img src="assets/judge_selection.png" width="90%" alt="Judge selection and validation">
+</p>
+<p align="center"><i>Figure 2: Judge selection and validation: candidate screening, complementary strengths, selected configuration, and the controlled logic-perturbation experiment.</i></p>
+
+## 🏆 Evaluation and Leaderboard
+
+Models are evaluated in three layers. Automated text metrics (BLEU, ROUGE-L, and embedding cosine similarity) are computed as a complementary reference but are not used for ranking. The primary measure is the LLM judge selected above, which scores every response under an evidence-constrained rubric: each judgment must identify the diagnostic pathway, cite case-specific discriminating evidence and the strongest counterevidence, and assign a 0 to 5 score bounded by scenario-dependent caps. As a validity anchor, a blinded multicenter panel of five TCM physicians scored a stratified nine-case subset with the same rubric.
+
+Seven models were evaluated: five general-purpose models and two TCM-specialized models. Content covers the seven blocks and logic consistency covers the three cross-block relations.
+
+**Table 2: Results on TCMCR-Reasoning, LLM judge and human expert panel**
+
+| Model | Content (%) | Logic Consistency (%) | Expert Content (0-5) | Expert Logic (0-5) |
+|---|---:|---:|---:|---:|
+| GPT-5.5 | **54.1** | **66.8** | **3.75** | **4.05** |
+| Claude-Opus-4.8 | 54.0 | 66.0 | 3.42 | 3.88 |
+| DeepSeek-V4-Pro | 48.5 | 65.4 | 3.37 | 3.86 |
+| Gemini-3.1-Pro | 47.7 | 64.5 | 2.87 | 3.64 |
+| Qwen3.7-Max | 45.8 | 64.7 | 3.35 | 3.76 |
+| ShizhenGPT-7B | 41.8 | 62.4 | 2.97 | 3.60 |
+| HuatuoGPT-3-8B | 40.7 | 60.8 | 2.76 | 3.30 |
+
+<i>Judge columns are normalized scores over all 2,000 cases. Expert columns are the consensus mean of the five physicians on the nine-case subset (0 to 5 scale). The two scales are not directly comparable in absolute terms; the judge is a stricter but directionally aligned measure.</i>
 
 <p align="center">
   <img src="assets/results.png" width="85%" alt="Overall content and cross-block logic consistency scores">
 </p>
-<p align="center"><i>Figure 2: Content and cross-block logic consistency scores of the seven evaluated models.</i></p>
+<p align="center"><i>Figure 3: Content and cross-block logic consistency scores of the seven evaluated models.</i></p>
 
-## 🔍 Key Findings
-
-- **Producing every section is easy; filling it correctly is not.** Structural completeness is nearly saturated for all models (99.3% to 100.0%), while normalized content scores stay between 40.7% and 54.1%.
-- **Coherence outruns correctness.** Every model scores 12.0 to 20.5 points higher on logic consistency than on content, and the gap widens on hard cases. A coherent chain may remain coherently wrong, so consistency must not be used as a proxy for correctness.
-- **Scores fall monotonically with difficulty.** Content scores decrease from easy to medium to hard for every model, which supports the embedding-based difficulty stratification.
-- **The weakest links are downstream.** Models score lowest on prescription generation, prescription analysis, and prescription modification, and the treatment principle → prescription → prescription analysis relation is the least consistent part of the chain.
-
-## ⚖️ Evaluation
-
-Scoring uses an LLM judge (Qwen3.7-Plus augmented with TCM-specific retrieval) under an evidence-constrained rubric: every judgment must identify the diagnostic pathway, cite case-specific discriminating evidence and the strongest counterevidence, and assign a 0 to 5 score bounded by scenario-dependent caps. The judge was selected through a head-to-head preliminary study against a TCM-specialized candidate, validated with 900 controlled logical perturbation pairs, and complemented by blinded scoring from a multicenter panel of five TCM physicians using the same rubric.
+In the expert study, models were anonymized as A to G with letters re-randomized per case, and each of the five physicians scored all 63 responses (3,150 ratings, no missing values). The panel and the judge identify the same leaders and the same laggards: model-ranking agreement reaches Kendall tau-b 0.52 for content and 0.78 for logic consistency, within-case orderings agree beyond chance (p < 0.001 for both tasks), and the judge scores systematically lower than the expert consensus. Structural completeness, the share of responses producing all required sections, is close to saturation for every model (99.3% to 100.0%) and is therefore not tabulated.
 
 ## 🔐 Data Access
 
@@ -141,6 +146,7 @@ Please make sure the contact email in the form is the one you want the notificat
 TCM-ClinicalReason/
 ├── assets/                                                  # Figures used in this README
 │   ├── overview.png
+│   ├── judge_selection.png
 │   └── results.png
 ├── data/
 │   ├── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
