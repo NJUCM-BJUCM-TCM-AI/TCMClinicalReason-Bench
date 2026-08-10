@@ -21,7 +21,7 @@
 - [Dataset](#-dataset)
 - [Preliminary Study](#-preliminary-study)
 - [Evaluation and Leaderboard](#-evaluation-and-leaderboard)
-- [Data Access](#-data-access)
+- [Evaluation and Data Access](#-evaluation-and-data-access)
 - [Repository Structure](#-repository-structure)
 - [Citation](#-citation)
 - [License and Contact](#-license-and-contact)
@@ -52,31 +52,15 @@ Cases are stratified into three difficulty tiers (easy 666 / medium 667 / hard 6
 
 ## 📊 Dataset
 
-The released test set comes in two aligned subsets. Both contain the same 2,000 cases with the same ids; they differ only in task format.
-
-| Subset | File | Task format |
-|---|---|---|
-| **TCMCR-Reasoning** | `data/TCMCR-Reasoning.json` | Full seven-block analysis: the model reads the case and produces the complete diagnostic and therapeutic sequence (reasoning pathway, etiology and pathogenesis, syndrome diagnosis, treatment principle, prescription, prescription analysis, prescription modification). This is the format used for all results reported below. |
-| **TCMCR-QA** | `data/TCMCR-QA.json` | Single-turn question answering: the model is asked directly for the syndrome, treatment principle, and herbal formula for the case. |
+The released test set is `data/TCMCR-Reasoning.json`: 2,000 cases in the full seven-block format. The model reads the case and produces the complete diagnostic and therapeutic sequence (reasoning pathway, etiology and pathogenesis, syndrome diagnosis, treatment principle, prescription, prescription analysis, prescription modification). This is the format used for all results reported below.
 
 **TCMCR-Reasoning fields**
 
 | Field | Description |
 |---|---|
-| `id` | Case id, `TCMCR-0001` to `TCMCR-2000`, shared across both subsets |
+| `id` | Case id, `TCMCR-0001` to `TCMCR-2000` |
 | `instruction` | Task instruction requesting the seven-block analysis |
 | `input` | Patient case record and current symptoms (Chinese) |
-| `disease` | Western-medicine disease label of the case |
-| `difficulty` | Case difficulty tier: `easy`, `medium`, or `hard` |
-
-**TCMCR-QA fields**
-
-| Field | Description |
-|---|---|
-| `id` | Case id, aligned with TCMCR-Reasoning |
-| `problem` | Question combining a concise instruction with the case record |
-| `disease` | Western-medicine disease label of the case |
-| `difficulty` | Case difficulty tier: `easy`, `medium`, or `hard` |
 
 **Table 1: Test set statistics**
 
@@ -88,7 +72,7 @@ The released test set comes in two aligned subsets. Both contain the same 2,000 
 | ICD-11 chapters covered | 19 |
 | Difficulty tiers (easy / medium / hard) | 666 / 667 / 667 |
 
-The gold labels (reference chain of thought, reference answer, and the seven-block decomposed reference labels) are not included in this repository and are available through gated access; see [Data Access](#-data-access).
+The gold labels (reference chain of thought, reference answer, and the seven-block decomposed reference labels) are not publicly released. Scoring against the gold labels is performed by the project team; see [Evaluation and Data Access](#-evaluation-and-data-access).
 
 ## 🔬 Preliminary Study
 
@@ -128,15 +112,40 @@ Seven models were evaluated: five general-purpose models and two TCM-specialized
 
 In the expert study, models were anonymized as A to G with letters re-randomized per case, and each of the five physicians scored all 63 responses (3,150 ratings, no missing values). The panel and the judge identify the same leaders and the same laggards: model-ranking agreement reaches Kendall tau-b 0.52 for content and 0.78 for logic consistency, within-case orderings agree beyond chance (p < 0.001 for both tasks), and the judge scores systematically lower than the expert consensus.
 
-## 🔐 Data Access
+A live leaderboard is coming soon. Results of externally submitted models will be added as they are evaluated; see [Evaluation and Data Access](#-evaluation-and-data-access) for how to submit a model.
 
-The test set in `data/` is publicly available. Access to the **gold labels** is gated and manually reviewed. To request access:
+## 🔐 Evaluation and Data Access
 
-1. Download and complete either the [Chinese application form](form/TCM-ClinicalReason_Label_Access_Application_Form_CN.docx) or the [English application form](form/TCM-ClinicalReason_Label_Access_Application_Form_EN.docx).
-2. Email the completed form to **zhiliu@njucm.edu.cn**. Suggested subject: `[TCM-ClinicalReason Label Access Application] Applicant name or institution name`.
-3. Each application will be reviewed individually. Approved applicants will be notified by email and provided with instructions for obtaining the gold labels.
+The test set in `data/` is publicly available. The **gold labels** are not publicly released, and all scoring is performed by the project team. To have a model evaluated:
 
-Please make sure the contact email in the form is the one you want the notification sent to.
+1. Run your model on `data/TCMCR-Reasoning.json` and collect its outputs into a single JSON file in the required format below. Only JSON files are accepted.
+2. Download and complete either the [Chinese application form](form/TCM-ClinicalReason_Evaluation_Application_Form_CN.docx) or the [English application form](form/TCM-ClinicalReason_Evaluation_Application_Form_EN.docx), including the model name and its HuggingFace or ModelScope URL.
+3. Package the output JSON file and the completed form together and email them to **zhiliu@njucm.edu.cn**. Suggested subject: `[TCM-ClinicalReason Evaluation Application] Model name or institution name`.
+
+The project team will evaluate the submitted outputs, send the results to the contact email given in the form, and publish them on the upcoming live leaderboard.
+
+### Model output format (required)
+
+The model's response to each case must be structured into the seven reasoning blocks, and the outputs for all 2,000 cases must be collected into one UTF-8 JSON file: a list of `{id, output}` records in which `output` holds the seven blocks under exactly the seven keys shown below. Excerpt from an actual GPT-5.5 response (content truncated):
+
+```json
+[
+  {
+    "id": "TCMCR-0001",
+    "output": {
+      "思维链": "患者服药后无明显不适，提示前方总体可耐受；但病情无明显改善，当前以乏力为主……",
+      "病因病机分析": "本案病机核心为本虚为主，正气不足。患者既往有怕冷，提示阳气不足，温煦失职……",
+      "证候诊断": "主证：脾气虚弱证。兼证：阳气不足、脾肾阳虚倾向。",
+      "治法": "益气健脾，温阳扶正；以补中益气、健运脾胃为主，少佐温阳助气……",
+      "处方": "拟方：补中益气汤合右归饮意加减。黄芪30g，党参15g，白术12g，茯苓15g……",
+      "方解": "黄芪、党参为君，益气扶正、补脾肺之气，针对乏力之本。白术、茯苓为臣……",
+      "症状变化与中药加减": "若乏力明显、动则气短、自汗，加太子参15g或人参6g另煎……"
+    }
+  }
+]
+```
+
+Submissions must cover all 2,000 ids, and the seven keys must match the names above exactly.
 
 ## 📁 Repository Structure
 
@@ -148,11 +157,10 @@ TCM-ClinicalReason/
 │   ├── judge_selection.png
 │   └── results.png
 ├── data/
-│   ├── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
-│   └── TCMCR-QA.json                                        # 2,000 cases, single-turn QA format
+│   └── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
 ├── form/
-│   ├── TCM-ClinicalReason_Label_Access_Application_Form_CN.docx
-│   └── TCM-ClinicalReason_Label_Access_Application_Form_EN.docx
+│   ├── TCM-ClinicalReason_Evaluation_Application_Form_CN.docx
+│   └── TCM-ClinicalReason_Evaluation_Application_Form_EN.docx
 ├── LICENSE                                                  # CC BY-NC 4.0
 └── README.md
 ```
@@ -165,4 +173,4 @@ Coming soon.
 
 This dataset is released under the [CC BY-NC 4.0](LICENSE) license for non-commercial research use. Model outputs on this benchmark must not be used as a direct basis for clinical diagnosis or treatment.
 
-For questions and label access requests: **zhiliu@njucm.edu.cn**
+For questions and evaluation requests: **zhiliu@njucm.edu.cn**
