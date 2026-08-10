@@ -1,8 +1,6 @@
 <div align="center">
 
-# TCM-ClinicalReason
-
-**A benchmark for evaluating case-level clinical reasoning of large language models in Traditional Chinese Medicine**
+<img src="assets/logo.svg" width="580" alt="TCM-ClinicalReason: a benchmark for Traditional Chinese Medicine">
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
 [![Cases](https://img.shields.io/badge/Cases-2%2C000-blue.svg)](#-dataset)
@@ -144,7 +142,8 @@ Please make sure the contact email in the form is the one you want the notificat
 
 ```
 TCM-ClinicalReason/
-├── assets/                                                  # Figures used in this README
+├── assets/                                                  # Logo and figures used in this README
+│   ├── logo.svg
 │   ├── overview.png
 │   ├── judge_selection.png
 │   └── results.png
