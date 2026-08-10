@@ -126,26 +126,81 @@ The project team will evaluate the submitted outputs, send the results to the co
 
 ### Model output format (required)
 
-The model's response to each case must be structured into the seven reasoning blocks, and the outputs for all 2,000 cases must be collected into one UTF-8 JSON file: a list of `{id, output}` records in which `output` holds the seven blocks under exactly the seven keys shown below. Excerpt from an actual GPT-5.5 response (content truncated):
+The model's response to each case must be structured into the seven reasoning blocks, and the outputs for all 2,000 cases must be collected into one UTF-8 JSON file: a list of `{id, output}` records in which `output` holds the seven blocks under exactly the seven Chinese keys. Expand either version below for the definition of each field and a complete sample:
+
+<details>
+<summary><b>📖 中文说明 (Chinese)</b></summary>
+
+模型对每个病例的回答必须拆分为以下 7 个字段，键名须与下表逐字一致：
+
+| 键名 | 含义 |
+|---|---|
+| `思维链` | 从病例信息出发的完整辨证论治推理过程：抓取关键症状体征，分析辨证要点，推导出证候、治法与方药的整体思路 |
+| `病因病机分析` | 分析本案的病因、病位、病性与病机演变过程 |
+| `证候诊断` | 明确的证型结论，先主证，如有兼证一并给出 |
+| `治法` | 与证候诊断对应的治疗法则 |
+| `处方` | 方剂名称与完整药物组成，含剂量与煎服法 |
+| `方解` | 按君臣佐使或逐味说明组方配伍逻辑 |
+| `症状变化与中药加减` | 针对可能的症状变化给出相应的药物加减方案 |
+
+完整样例如下，取自 GPT-5.5 对 TCMCR-0001 的实际回答：
 
 ```json
 [
   {
     "id": "TCMCR-0001",
     "output": {
-      "思维链": "患者服药后无明显不适，提示前方总体可耐受；但病情无明显改善，当前以乏力为主……",
-      "病因病机分析": "本案病机核心为本虚为主，正气不足。患者既往有怕冷，提示阳气不足，温煦失职……",
+      "思维链": "患者服药后无明显不适，提示前方总体可耐受；但病情无明显改善，当前以乏力为主，怕冷较前减轻，无腰痛，纳眠可，二便调。怕冷减轻说明阳虚寒象较前有所缓解；无腰痛、二便调，肾虚失固或寒湿痹阻表现不突出；纳眠可，说明脾胃受纳与心神相对平稳。现阶段症状集中在乏力，结合既往怕冷，辨为正气不足、阳气未充，尤以脾肾阳气不足或脾气虚为主。因寒象已减、腰痛已无，治疗不宜过于温燥峻补，应以益气健脾、温阳扶正为主，兼顾气血生化，使阳气得复、疲乏渐除。",
+      "病因病机分析": "本案病机核心为本虚为主，正气不足。患者既往有怕冷，提示阳气不足，温煦失职；现怕冷较前减轻，说明寒象减轻但阳气尚未完全恢复。乏力为脾气不足、气虚推动无力之象；纳可、二便调，提示中焦运化尚可，未见明显湿困、食滞或泄泻。无腰痛则肾虚寒凝、经脉失养之表现不明显，但既往畏寒仍提示肾阳或脾阳偏虚之体质基础。整体为脾气亏虚为主，兼有阳虚未复，气虚则四肢肌肉失养而乏力，阳虚则温煦不足而畏寒；邪实不著，治当扶正为主，少佐温阳。",
       "证候诊断": "主证：脾气虚弱证。兼证：阳气不足、脾肾阳虚倾向。",
-      "治法": "益气健脾，温阳扶正；以补中益气、健运脾胃为主，少佐温阳助气……",
-      "处方": "拟方：补中益气汤合右归饮意加减。黄芪30g，党参15g，白术12g，茯苓15g……",
-      "方解": "黄芪、党参为君，益气扶正、补脾肺之气，针对乏力之本。白术、茯苓为臣……",
-      "症状变化与中药加减": "若乏力明显、动则气短、自汗，加太子参15g或人参6g另煎……"
+      "治法": "益气健脾，温阳扶正；以补中益气、健运脾胃为主，少佐温阳助气，避免过用辛热，以免伤阴耗气。",
+      "处方": "拟方：补中益气汤合右归饮意加减。黄芪30g，党参15g，白术12g，茯苓15g，炙甘草6g，当归10g，陈皮6g，升麻3g，柴胡3g，桂枝6g，干姜3g，杜仲10g，枸杞子12g，大枣3枚。每日1剂，水煎分早晚温服。若既往原方有效且无不适，可在原方基础上按此思路调整。",
+      "方解": "黄芪、党参为君，益气扶正、补脾肺之气，针对乏力之本。白术、茯苓为臣，健脾益气、助运化，使气血生化有源，且防补药壅滞。炙甘草、大枣补中和胃，调和诸药。陈皮理气醒脾，使补而不滞，适合纳眠可、二便调而以虚为主者。当归养血和营，气虚日久可兼血虚，益气配养血有助于体力恢复。升麻、柴胡少量升提清阳，助脾气上升，改善气虚下陷所致倦怠乏力。桂枝、干姜少量温阳散寒，针对怕冷虽减但阳气未充；用量轻，取温扶而不峻燥。杜仲、枸杞子补益肝肾、强腰膝，虽目前无腰痛，但可顾护肾气、巩固阳气之根，使温煦功能逐步恢复。全方以益气健脾为主，温阳为辅，符合当前寒象减轻而乏力未除之证。",
+      "症状变化与中药加减": "若乏力明显、动则气短、自汗，加太子参15g或人参6g另煎，五味子6g，浮小麦20g，以益气敛汗。若怕冷仍明显、四肢不温，可加制附子3-6g先煎，肉桂3g后下，酌减升麻、柴胡，以增强温阳。若出现腰膝酸软、夜尿多，可加山药15g、山茱萸10g、菟丝子12g、益智仁10g，以补肾固摄。若纳差、腹胀、嗳气，减当归、枸杞子，加砂仁3g后下、木香6g、焦三仙各10g，以行气醒脾消食。若大便偏溏，去当归或减量，加山药20g、莲子12g、炮姜6g。若口干咽燥、舌红少苔或上火，减干姜、桂枝，去附子肉桂，加麦冬12g、石斛10g，以防温燥伤阴。若睡眠转差、心悸健忘，可加酸枣仁15g、龙眼肉10g、远志6g，以养心安神。若服药2周后仍乏力无改善，应复查舌脉及必要的现代医学指标，如血常规、甲状腺功能、肝肾功能、血糖等，以排除贫血、甲减、感染后疲劳等因素。"
     }
   }
 ]
 ```
 
-Submissions must cover all 2,000 ids, and the seven keys must match the names above exactly.
+</details>
+
+<details>
+<summary><b>📖 English version</b></summary>
+
+The response for each case must be split into the following seven fields. The keys must match the Chinese names below exactly:
+
+| Key | Meaning |
+|---|---|
+| `思维链` (reasoning pathway) | The complete diagnostic reasoning process grounded in the case: key symptoms and signs, differentiation analysis, and the path leading to the syndrome, treatment principle, and prescription |
+| `病因病机分析` (etiology and pathogenesis analysis) | Analysis of the cause, location, nature, and pathogenetic evolution of the disorder |
+| `证候诊断` (syndrome diagnosis) | The syndrome conclusion: the principal syndrome, plus concurrent syndromes if any |
+| `治法` (treatment principle) | The treatment principle corresponding to the syndrome diagnosis |
+| `处方` (prescription) | Formula name and the complete herb composition with dosages and administration |
+| `方解` (prescription analysis) | The compositional logic of the formula, explained herb by herb or by the sovereign, minister, assistant, and courier roles |
+| `症状变化与中药加减` (prescription modification) | Herb additions and removals in response to possible symptom changes |
+
+A complete sample, taken from the actual GPT-5.5 response to TCMCR-0001:
+
+```json
+[
+  {
+    "id": "TCMCR-0001",
+    "output": {
+      "思维链": "患者服药后无明显不适，提示前方总体可耐受；但病情无明显改善，当前以乏力为主，怕冷较前减轻，无腰痛，纳眠可，二便调。怕冷减轻说明阳虚寒象较前有所缓解；无腰痛、二便调，肾虚失固或寒湿痹阻表现不突出；纳眠可，说明脾胃受纳与心神相对平稳。现阶段症状集中在乏力，结合既往怕冷，辨为正气不足、阳气未充，尤以脾肾阳气不足或脾气虚为主。因寒象已减、腰痛已无，治疗不宜过于温燥峻补，应以益气健脾、温阳扶正为主，兼顾气血生化，使阳气得复、疲乏渐除。",
+      "病因病机分析": "本案病机核心为本虚为主，正气不足。患者既往有怕冷，提示阳气不足，温煦失职；现怕冷较前减轻，说明寒象减轻但阳气尚未完全恢复。乏力为脾气不足、气虚推动无力之象；纳可、二便调，提示中焦运化尚可，未见明显湿困、食滞或泄泻。无腰痛则肾虚寒凝、经脉失养之表现不明显，但既往畏寒仍提示肾阳或脾阳偏虚之体质基础。整体为脾气亏虚为主，兼有阳虚未复，气虚则四肢肌肉失养而乏力，阳虚则温煦不足而畏寒；邪实不著，治当扶正为主，少佐温阳。",
+      "证候诊断": "主证：脾气虚弱证。兼证：阳气不足、脾肾阳虚倾向。",
+      "治法": "益气健脾，温阳扶正；以补中益气、健运脾胃为主，少佐温阳助气，避免过用辛热，以免伤阴耗气。",
+      "处方": "拟方：补中益气汤合右归饮意加减。黄芪30g，党参15g，白术12g，茯苓15g，炙甘草6g，当归10g，陈皮6g，升麻3g，柴胡3g，桂枝6g，干姜3g，杜仲10g，枸杞子12g，大枣3枚。每日1剂，水煎分早晚温服。若既往原方有效且无不适，可在原方基础上按此思路调整。",
+      "方解": "黄芪、党参为君，益气扶正、补脾肺之气，针对乏力之本。白术、茯苓为臣，健脾益气、助运化，使气血生化有源，且防补药壅滞。炙甘草、大枣补中和胃，调和诸药。陈皮理气醒脾，使补而不滞，适合纳眠可、二便调而以虚为主者。当归养血和营，气虚日久可兼血虚，益气配养血有助于体力恢复。升麻、柴胡少量升提清阳，助脾气上升，改善气虚下陷所致倦怠乏力。桂枝、干姜少量温阳散寒，针对怕冷虽减但阳气未充；用量轻，取温扶而不峻燥。杜仲、枸杞子补益肝肾、强腰膝，虽目前无腰痛，但可顾护肾气、巩固阳气之根，使温煦功能逐步恢复。全方以益气健脾为主，温阳为辅，符合当前寒象减轻而乏力未除之证。",
+      "症状变化与中药加减": "若乏力明显、动则气短、自汗，加太子参15g或人参6g另煎，五味子6g，浮小麦20g，以益气敛汗。若怕冷仍明显、四肢不温，可加制附子3-6g先煎，肉桂3g后下，酌减升麻、柴胡，以增强温阳。若出现腰膝酸软、夜尿多，可加山药15g、山茱萸10g、菟丝子12g、益智仁10g，以补肾固摄。若纳差、腹胀、嗳气，减当归、枸杞子，加砂仁3g后下、木香6g、焦三仙各10g，以行气醒脾消食。若大便偏溏，去当归或减量，加山药20g、莲子12g、炮姜6g。若口干咽燥、舌红少苔或上火，减干姜、桂枝，去附子肉桂，加麦冬12g、石斛10g，以防温燥伤阴。若睡眠转差、心悸健忘，可加酸枣仁15g、龙眼肉10g、远志6g，以养心安神。若服药2周后仍乏力无改善，应复查舌脉及必要的现代医学指标，如血常规、甲状腺功能、肝肾功能、血糖等，以排除贫血、甲减、感染后疲劳等因素。"
+    }
+  }
+]
+```
+
+</details>
+
+Submissions must cover all 2,000 ids.
 
 ## 📁 Repository Structure
 
