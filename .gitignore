@@ -1,0 +1,16 @@
+# Gold labels and any internal judge resources must never enter this repository
+*[Ll]abels*.json
+*gold*.json
+*_rag*.json
+release_private/
+
+# Python
+__pycache__/
+*.pyc
+
+# Office temp files
+~$*
+
+# OS
+.DS_Store
+Thumbs.db
