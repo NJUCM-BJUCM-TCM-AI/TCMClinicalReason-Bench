@@ -128,7 +128,7 @@ Seven models were evaluated: five general-purpose models and two TCM-specialized
 </p>
 <p align="center"><i>Figure 3: Content and cross-block logic consistency scores of the seven evaluated models.</i></p>
 
-In the expert study, models were anonymized as A to G with letters re-randomized per case, and each of the five physicians scored all 63 responses (3,150 ratings, no missing values). The panel and the judge identify the same leaders and the same laggards: model-ranking agreement reaches Kendall tau-b 0.52 for content and 0.78 for logic consistency, within-case orderings agree beyond chance (p < 0.001 for both tasks), and the judge scores systematically lower than the expert consensus. Structural completeness, the share of responses producing all required sections, is close to saturation for every model (99.3% to 100.0%) and is therefore not tabulated.
+In the expert study, models were anonymized as A to G with letters re-randomized per case, and each of the five physicians scored all 63 responses (3,150 ratings, no missing values). The panel and the judge identify the same leaders and the same laggards: model-ranking agreement reaches Kendall tau-b 0.52 for content and 0.78 for logic consistency, within-case orderings agree beyond chance (p < 0.001 for both tasks), and the judge scores systematically lower than the expert consensus.
 
 ## 🔐 Data Access
 
