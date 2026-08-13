@@ -10,7 +10,7 @@
 </div>
 
 <p align="center">
-  <img src="assets/overview.png" width="90%" alt="Evaluation framework of TCM-ClinicalReason">
+  <img src="assets/evaluation_framework.svg" width="90%" alt="Evaluation framework of TCM-ClinicalReason">
 </p>
 <p align="center"><i>Figure 1: Overall evaluation framework of TCM-ClinicalReason.</i></p>
 
@@ -81,7 +81,7 @@ Before the formal run, two candidate judges were compared head to head on the ou
 The selected judge was then stress-tested with controlled logical perturbations: single targeted errors were injected into model responses for 100 stratified cases, yielding 900 matched original-perturbed pairs across the three reasoning chains. The judge reliably penalized explicit contradictions such as cold-heat reversal and treatment-direction reversal (detection rates of 57 and 56 percent on the first two reasoning chains), and was less sensitive to omission-type errors in prescription analysis (31 percent on the third reasoning chain), which bounds the kinds of reasoning errors the reported scores can be trusted to reflect.
 
 <p align="center">
-  <img src="assets/judge_selection.png" width="90%" alt="Judge selection and validation">
+  <img src="assets/judge_selection.svg" width="90%" alt="Judge selection and validation">
 </p>
 <p align="center"><i>Figure 2: Judge selection and validation: candidate screening, complementary strengths, selected configuration, and the controlled logic-perturbation experiment.</i></p>
 
@@ -208,8 +208,8 @@ Submissions must cover all 2,000 ids.
 TCM-ClinicalReason/
 ├── assets/                                                  # Logo and figures used in this README
 │   ├── logo.svg
-│   ├── overview.png
-│   ├── judge_selection.png
+│   ├── evaluation_framework.svg
+│   ├── judge_selection.svg
 │   └── results.png
 ├── data/
 │   └── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
