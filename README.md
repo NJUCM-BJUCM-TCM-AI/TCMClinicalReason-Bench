@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="assets/logo.svg" width="580" alt="TCM-ClinicalReason: a benchmark for Traditional Chinese Medicine">
+<img src="assets/logo.svg" width="580" alt="TCMClinicalReason-Bench: a benchmark for Traditional Chinese Medicine">
+
+*Can Language Models Reason from Pathogenesis to Prescription in Real-World Cases?*
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
 [![Cases](https://img.shields.io/badge/Cases-2%2C000-blue.svg)](#-dataset)
@@ -10,9 +12,9 @@
 </div>
 
 <p align="center">
-  <img src="assets/evaluation_framework.svg" width="90%" alt="Evaluation framework of TCM-ClinicalReason">
+  <img src="assets/evaluation_framework.svg" width="90%" alt="Evaluation framework of TCMClinicalReason-Bench">
 </p>
-<p align="center"><i>Figure 1: Overall evaluation framework of TCM-ClinicalReason.</i></p>
+<p align="center"><i>Figure 1: Overall evaluation framework of TCMClinicalReason-Bench.</i></p>
 
 ## 📋 Table of Contents
 
@@ -28,7 +30,7 @@
 
 ## 📖 Introduction
 
-TCM-ClinicalReason is a benchmark built from 2,000 authentic clinical case records documented by renowned senior TCM physicians, curated from multicenter electronic health records and published TCM case reports. Each case is decomposed into a complete seven-step diagnostic and therapeutic sequence, and model outputs are scored along two complementary axes: **case-grounded content adequacy** of each reasoning block and **logic consistency** across the dependencies between blocks. The benchmark is designed to accept clinically defensible alternative pathways rather than reward string overlap with a single reference answer.
+TCMClinicalReason-Bench is a benchmark built from 2,000 authentic clinical case records documented by renowned senior TCM physicians, curated from multicenter electronic health records and published TCM case reports. Each case is decomposed into a complete seven-step diagnostic and therapeutic sequence, and model outputs are scored along two complementary axes: **case-grounded content adequacy** of each reasoning block and **logic consistency** across the dependencies between blocks. The benchmark is designed to accept clinically defensible alternative pathways rather than reward string overlap with a single reference answer.
 
 ## 🧩 Benchmark Design
 
@@ -119,8 +121,8 @@ A live leaderboard is coming soon. Results of externally submitted models will b
 The test set in `data/` is publicly available. The **gold labels** are not publicly released, and all scoring is performed by the project team. To have a model evaluated:
 
 1. Run your model on `data/TCMCR-Reasoning.json` and collect its outputs into a single JSON file in the required format below. Only JSON files are accepted.
-2. Download and complete either the [Chinese application form](form/TCM-ClinicalReason_Evaluation_Application_Form_CN.docx) or the [English application form](form/TCM-ClinicalReason_Evaluation_Application_Form_EN.docx), including the model name and its HuggingFace or ModelScope URL.
-3. Package the output JSON file and the completed form together and email them to **zhiliu@njucm.edu.cn**. Suggested subject: `[TCM-ClinicalReason Evaluation Application] Model name or institution name`.
+2. Download and complete either the [Chinese application form](form/TCMClinicalReason-Bench_Evaluation_Application_Form_CN.docx) or the [English application form](form/TCMClinicalReason-Bench_Evaluation_Application_Form_EN.docx), including the model name and its HuggingFace or ModelScope URL.
+3. Package the output JSON file and the completed form together and email them to **zhiliu@njucm.edu.cn**. Suggested subject: `[TCMClinicalReason-Bench Evaluation Application] Model name or institution name`.
 
 The project team will evaluate the submitted outputs, send the results to the contact email given in the form, and publish them on the upcoming live leaderboard.
 
@@ -205,7 +207,7 @@ Submissions must cover all 2,000 ids.
 ## 📁 Repository Structure
 
 ```
-TCM-ClinicalReason/
+TCMClinicalReason-Bench/
 ├── assets/                                                  # Logo and figures used in this README
 │   ├── logo.svg
 │   ├── evaluation_framework.svg
@@ -214,8 +216,8 @@ TCM-ClinicalReason/
 ├── data/
 │   └── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
 ├── form/
-│   ├── TCM-ClinicalReason_Evaluation_Application_Form_CN.docx
-│   └── TCM-ClinicalReason_Evaluation_Application_Form_EN.docx
+│   ├── TCMClinicalReason-Bench_Evaluation_Application_Form_CN.docx
+│   └── TCMClinicalReason-Bench_Evaluation_Application_Form_EN.docx
 ├── LICENSE                                                  # CC BY-NC 4.0
 └── README.md
 ```

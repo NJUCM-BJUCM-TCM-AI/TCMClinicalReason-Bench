@@ -13,8 +13,8 @@
     <circle cx="104" cy="46" r="5.6" fill="#C9783B"/>
   </g>
   <g font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
-    <text x="185" y="88" font-size="44" letter-spacing="-0.5">
-      <tspan font-weight="800" fill="#2E8790">TCM</tspan><tspan font-weight="600" fill="#2B3F47">-Clinical</tspan><tspan font-weight="600" fill="#C9783B">Reason</tspan>
+    <text x="185" y="86" font-size="37" letter-spacing="-0.5">
+      <tspan font-weight="800" fill="#2E8790">TCM</tspan><tspan font-weight="600" fill="#2B3F47">Clinical</tspan><tspan font-weight="600" fill="#C9783B">Reason</tspan><tspan font-weight="600" fill="#2B3F47">-Bench</tspan>
     </text>
     <text x="188" y="122" font-size="14" letter-spacing="2.4" font-weight="600" fill="#6B8288">A BENCHMARK FOR TRADITIONAL CHINESE MEDICINE</text>
   </g>
