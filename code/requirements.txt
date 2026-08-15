@@ -1,0 +1,5 @@
+# inference_api.py (API models)
+openai>=1.40
+
+# inference_vllm.py (open-weight models, requires a CUDA GPU)
+vllm>=0.5

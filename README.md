@@ -24,6 +24,7 @@
 - [Preliminary Study](#-preliminary-study)
 - [Evaluation and Leaderboard](#-evaluation-and-leaderboard)
 - [Evaluation and Data Access](#-evaluation-and-data-access)
+- [Code](#-code)
 - [Repository Structure](#-repository-structure)
 - [Citation](#-citation)
 - [License and Contact](#-license-and-contact)
@@ -120,7 +121,7 @@ A live leaderboard is coming soon. Results of externally submitted models will b
 
 The test set in `data/` is publicly available. The **gold labels** are not publicly released, and all scoring is performed by the project team. To have a model evaluated:
 
-1. Run your model on `data/TCMCR-Reasoning.json` and collect its outputs into a single JSON file in the required format below. Only JSON files are accepted.
+1. Run your model on `data/TCMCR-Reasoning.json` and collect its outputs into a single JSON file in the required format below. Only JSON files are accepted. The inference scripts in [`code/`](#-code) produce this format directly.
 2. Download and complete either the [Chinese application form](form/TCMClinicalReason-Bench_Evaluation_Application_Form_CN.docx) or the [English application form](form/TCMClinicalReason-Bench_Evaluation_Application_Form_EN.docx), including the model name and its HuggingFace or ModelScope URL.
 3. Package the output JSON file and the completed form together and email them to **zhiliu@njucm.edu.cn**. Suggested subject: `[TCMClinicalReason-Bench Evaluation Application] Model name or institution name`.
 
@@ -204,6 +205,41 @@ A complete sample, adapted from the actual GPT-5.5 response to TCMCR-0001 (the o
 
 Submissions must cover all 2,000 ids.
 
+## 💻 Code
+
+`code/` contains the inference scripts used to produce the model outputs reported above. Both scripts read `data/TCMCR-Reasoning.json` and write `code/outputs/submission_<model>.json` directly in the required submission format (Chinese keys, recommended), ready to be packaged with the application form.
+
+```bash
+pip install -r code/requirements.txt
+```
+
+**API models** (`code/inference_api.py`) — set the API key for the models you want to run:
+
+| Environment variable | Models |
+|---|---|
+| `OPENROUTER_API_KEY` | `gpt`, `claude`, `gemini` |
+| `DEEPSEEK_API_KEY` | `deepseek` |
+| `DASHSCOPE_API_KEY` | `qwen` |
+
+```bash
+export OPENROUTER_API_KEY=sk-...
+python code/inference_api.py --model gpt        # -> code/outputs/submission_gpt.json
+python code/inference_api.py --model all        # all five API models
+```
+
+Interrupted runs resume automatically: completed records are kept (matched by id) and only missing or failed ones are re-run. Use `--overwrite` to start from scratch and `--limit N` for a quick smoke test.
+
+**Open-weight models** (`code/inference_vllm.py`, requires a CUDA GPU) — models are pulled from the HuggingFace Hub:
+
+```bash
+python code/inference_vllm.py --model huatuo    # -> code/outputs/submission_huatuo.json
+python code/inference_vllm.py --model shizhen
+```
+
+If some records come back empty, re-run with `--patch` to regenerate only those.
+
+To evaluate your own model, use these scripts as a reference implementation: any inference pipeline is acceptable as long as the final JSON follows the submission format above.
+
 ## 📁 Repository Structure
 
 ```
@@ -213,6 +249,10 @@ TCMClinicalReason-Bench/
 │   ├── evaluation_framework.svg
 │   ├── judge_selection.svg
 │   └── results.png
+├── code/                                                    # Inference scripts (submission-format output)
+│   ├── inference_api.py                                     # API models via OpenRouter / DeepSeek / DashScope
+│   ├── inference_vllm.py                                    # Open-weight TCM models via vLLM
+│   └── requirements.txt
 ├── data/
 │   └── TCMCR-Reasoning.json                                 # 2,000 cases, seven-block format
 ├── form/

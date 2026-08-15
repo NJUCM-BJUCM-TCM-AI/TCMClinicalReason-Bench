@@ -8,6 +8,10 @@ release_private/
 __pycache__/
 *.pyc
 
+# Inference outputs and logs (never commit model outputs)
+outputs/
+inference_logs/
+
 # Office temp files
 ~$*
 
